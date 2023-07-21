@@ -3,6 +3,8 @@ import classnames from "classnames"
 
 import { Board as TBoard } from "./index"
 
+import logoLightImg from "./assets/images/logo-light.svg"
+import logoDarkImg from "./assets/images/logo-dark.svg"
 import logoMobileImg from "./assets/images/logo-mobile.svg"
 import chevronDownImg from "./assets/images/icon-chevron-down.svg"
 import addTaskMobileImg from "./assets/images/icon-add-task-mobile.svg"
@@ -14,26 +16,36 @@ const Board = ({ board } : { board: TBoard }) => {
   
   return (
     <div className="h-screen flex flex-col">
-      <div className="pl-4 py-4 flex items-center justify-between bg-white">
-        <div className="flex items-center">
-          <img src={logoMobileImg} />
-          <p className="ml-4 text-18 font-bold">{board.name}</p>
-          <img src={chevronDownImg} className="w-2.5 ml-2" />
+      <div className="flex items-center justify-between border-b border-transparent sm:border-gray-200 bg-white">
+        <div className="h-full flex items-center">
+          <div className="pl-4 sm:px-6">
+            <img src={logoMobileImg} className="sm:hidden" />
+            <img src={logoDarkImg} className="hidden sm:block" />
+          </div>
+          <div className="h-full pl-4 flex items-center sm:pl-6 sm:border-l sm:border-gray-200">
+            <p className="text-18 font-bold sm:text-20">{board.name}</p>
+            <img src={chevronDownImg} className="sm:hidden w-2.5 ml-2" />
+          </div>
         </div>
-        <div className="flex items-center">
-          <button type="button" className={classnames("px-4 py-2 bg-purple rounded-full shadow-md", {
-            "opacity-25": !addTaskButtonEnabled,
-          })}>
+        <div className="py-4 flex items-center">
+          <button 
+            type="button" 
+            className={classnames("px-4 py-2 flex items-center bg-purple rounded-full shadow-md sm:px-6 sm:py-4", {
+              "opacity-25": !addTaskButtonEnabled,
+            })}
+            disabled={!addTaskButtonEnabled}
+          >
             <img src={addTaskMobileImg} className="w-3" />
+            <span className="hidden ml-2 text-white sm:block">Add New Task</span>
           </button>
-          <button type="button" className="px-4">
+          <button type="button" className="h-full px-4 sm:px-6">
             <img src={verticalEllipsisImg} />
           </button>
         </div>
       </div>
       {boardEmpty ? (
         <div className="grow flex items-center">
-          <div>
+          <div className="w-full">
             <p className="px-8 text-center text-18 font-bold text-gray-300">
               This board is empty. Create a new column to get started.
             </p>
