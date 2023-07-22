@@ -34,17 +34,17 @@ const Header = ({
   const activeBoard = boards[activeBoardIndex]
 
   return (
-    <div className="relative flex items-center justify-between border-b border-transparent sm:border-gray-200 bg-white">
+    <div className="relative flex items-center justify-between border-b border-transparent md:border-gray-200 bg-white">
       <div className="h-full flex items-center">
         <div className="h-full">
-          <div className="h-full pl-4 flex items-center sm:px-6 sm:border-r sm:border-gray-200">
-            <img src={logoMobileImg} className="sm:hidden" />
-            <img src={logoDarkImg} className="hidden sm:block" />
+          <div className="h-full pl-4 flex items-center md:px-6 md:border-r md:border-gray-200">
+            <img src={logoMobileImg} className="md:hidden" />
+            <img src={logoDarkImg} className="hidden md:block" />
           </div>
           <Transition
             appear={true}
             show={sidebarOpen}
-            className="hidden sm:block"
+            className="hidden md:block"
             enter={`transition-all ${sidebarEnterDurationClass}`}
             enterFrom="w-0"
             enterTo="w-sidebar"
@@ -55,13 +55,13 @@ const Header = ({
         </div>
         <button
           type="button" 
-          className="h-full pl-4 flex items-center sm:pl-6"
+          className="h-full pl-4 flex items-center md:pl-6 md:pointer-events-none"
           onClick={() => toggleSidebar()}
         >
-          <p className="text-18 font-bold sm:text-20">{activeBoard.name}</p>
+          <p className="text-18 font-bold md:text-20">{activeBoard.name}</p>
           <img 
             src={chevronDownImg} 
-            className={classnames(`sm:hidden w-2.5 ml-2 transition-transform duration-300`, {
+            className={classnames(`md:hidden w-2.5 ml-2 transition-transform duration-300`, {
               "rotate-180": sidebarOpen,
             })} 
           />
@@ -70,22 +70,22 @@ const Header = ({
       <div className="py-4 flex items-center">
         <button 
           type="button" 
-          className={classnames("px-4 py-2 flex items-center bg-purple font-bold rounded-full shadow-md sm:px-6 sm:py-4", {
+          className={classnames("px-4 py-2 flex items-center bg-purple font-bold rounded-full shadow-md md:px-6 md:py-4", {
             "hover:bg-light-purple transition-colors": addTaskButtonEnabled,
             "opacity-25": !addTaskButtonEnabled,
           })}
           disabled={!addTaskButtonEnabled}
         >
           <PlusIcon className="w-3 fill-white" />
-          <span className="hidden ml-2 text-white sm:block">Add New Task</span>
+          <span className="hidden ml-2 text-white md:block">Add New Task</span>
         </button>
-        <button type="button" className="h-full px-4 sm:px-6">
+        <button type="button" className="h-full px-4 md:px-6">
           <img src={verticalEllipsisImg} />
         </button>
       </div>
       <Transition
         show={sidebarOpen}
-        className="w-4/5 absolute z-20 left-1/2 -translate-x-1/2 top-full sm:hidden"
+        className="w-4/5 absolute z-20 left-1/2 -translate-x-1/2 top-full md:hidden"
         enter={`transition ${sidebarEnterDurationClass}`}
         enterFrom="-translate-y-4 opacity-0"
         enterTo="translate-y-0 opacity-100"
