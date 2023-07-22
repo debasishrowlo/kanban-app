@@ -4,5 +4,13 @@ body {
     @apply bg-gray-100 font-jakarta text-black;
 }
 
+.w-sidebar {
+    width: 260px;
+}
+
+.tracking-title {
+    letter-spacing: 0.15rem;
+}
+
 @tailwind components;
 @tailwind utilities;
