@@ -4,12 +4,12 @@ import { Transition } from "@headlessui/react"
 
 import BoardIcon from "./assets/icons/Board"
 import PlusIcon from "./assets/icons/Plus"
+import SlashedEyeIcon from "./assets/icons/SlashedEye"
 
 import chevronDownImg from "./assets/images/icon-chevron-down.svg"
 import eyeImg from "./assets/images/icon-show-sidebar.svg"
 import logoDarkImg from "./assets/images/logo-dark.svg"
 import logoMobileImg from "./assets/images/logo-mobile.svg"
-import slashedEyeImg from "./assets/images/icon-hide-sidebar.svg"
 import verticalEllipsisImg from "./assets/images/icon-vertical-ellipsis.svg"
 
 export type Board = {
@@ -205,7 +205,8 @@ const App = () => {
         <div className="py-4 flex items-center">
           <button 
             type="button" 
-            className={classnames("px-4 py-2 flex items-center bg-purple hover:bg-light-purple font-bold rounded-full shadow-md transition-colors sm:px-6 sm:py-4", {
+            className={classnames("px-4 py-2 flex items-center bg-purple font-bold rounded-full shadow-md sm:px-6 sm:py-4", {
+              "hover:bg-light-purple transition-colors": addTaskButtonEnabled,
               "opacity-25": !addTaskButtonEnabled,
             })}
             disabled={!addTaskButtonEnabled}
@@ -296,14 +297,14 @@ const App = () => {
               <div className="pr-5 absolute z-10 top-0 left-0 w-full h-full -translate-x-full group-hover:translate-x-0 transition-transform duration-300 opacity-10">
                 <div className="w-full h-full bg-purple rounded-r-full"></div>
               </div>
-              <img src={slashedEyeImg} />
-              <p className="ml-3 text-16 font-bold text-gray-300">Hide Sidebar</p>
+              <SlashedEyeIcon className="fill-gray-300 group-hover:fill-purple transition-colors duration-300" />
+              <p className="ml-3 text-16 font-bold text-gray-300 group-hover:text-purple transition-colors duration-300">Hide Sidebar</p>
             </button>
           </Transition>
           <button 
             type="button"
             onClick={toggleSidebar}
-            className="hidden sm:block w-14 h-12 absolute z-10 left-0 bottom-8 bg-purple rounded-r-full"
+            className="hidden sm:block w-14 h-12 absolute z-10 left-0 bottom-8 bg-purple hover:bg-light-purple transition-colors rounded-r-full"
           >
             <img src={eyeImg} className="mx-auto w-4" />
           </button>
