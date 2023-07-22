@@ -27,6 +27,67 @@ export type Board = {
   }>,
 }
 
+const BoardList = ({
+  boards,
+  activeBoardIndex,
+  showBoard,
+} : {
+  boards: Board[],
+  activeBoardIndex: number,
+  showBoard: Function,
+}) => {
+  return (
+    <div>
+      <p className="px-6 text-12 font-bold text-gray-300 tracking-title uppercase">All Boards ({boards.length})</p>
+      <div className="mt-5">
+        {boards.map((board, index) => {
+          const isActive = index === activeBoardIndex
+          
+          return (
+            <button 
+              type="button" 
+              className="w-full relative px-6 py-4 group"
+              onClick={() => showBoard(index)}
+              key={index}
+            >
+              <div className="pr-5 absolute z-10 top-0 left-0 w-full h-full -translate-x-full group-hover:translate-x-0 transition-transform duration-300 opacity-10">
+                <div className="w-full h-full bg-purple rounded-r-full"></div>
+              </div>
+              <Transition
+                show={isActive}
+                className="pr-5 absolute z-20 top-0 left-0 w-full h-full"
+                enter="transition-transform duration-300"
+                enterFrom="-translate-x-full"
+                enterTo="translate-x-0"
+                leave="transition-transform duration-300"
+                leaveFrom="translate-x-0"
+                leaveTo="-translate-x-full"
+              >
+                <div className="w-full h-full bg-purple rounded-r-full"></div>
+              </Transition>
+              <div className="relative z-30 flex items-center">
+                <BoardIcon className={classnames("transition-colors duration-300", {
+                  "fill-white": isActive,
+                  "fill-gray-300 group-hover:fill-purple": !isActive,
+                })} />
+                <p className={classnames("ml-3 text-16 font-bold transition-colors duration-300", {
+                  "text-white": isActive,
+                  "text-gray-300 group-hover:text-purple": !isActive,
+                })}>{board.name}</p>
+              </div>
+            </button>
+          )
+        })}
+      </div>
+      <button type="button" className="w-full px-6 py-4 flex items-center">
+        <BoardIcon className="fill-purple" />
+        <PlusIcon className="ml-3 w-2.5 fill-purple" />
+        <span className="ml-1 text-16 font-bold text-purple">Create New Board</span>
+      </button>
+    </div>
+  )
+}
+
 const App = () => {
   const boards:Board[] = [
     {
@@ -173,13 +234,17 @@ const App = () => {
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const showBoard = (index:number) => setActiveBoardIndex(index)
+  const showBoardMobile = (index:number) => {
+    setActiveBoardIndex(index)
+    toggleSidebar()
+  }
 
   const sidebarEnterDurationClass = "duration-[400ms]"
   const sidebarLeaveDurationClass = "duration-300"
   
   return (
     <div className="h-screen flex flex-col">
-      <div className="flex items-center justify-between border-b border-transparent sm:border-gray-200 bg-white">
+      <div className="relative flex items-center justify-between border-b border-transparent sm:border-gray-200 bg-white">
         <div className="h-full flex items-center">
           <div className="h-full">
             <div className="h-full pl-4 flex items-center sm:px-6 sm:border-r sm:border-gray-200">
@@ -189,6 +254,7 @@ const App = () => {
             <Transition
               appear={true}
               show={sidebarOpen}
+              className="hidden sm:block"
               enter={`transition-all ${sidebarEnterDurationClass}`}
               enterFrom="w-0"
               enterTo="w-sidebar"
@@ -197,10 +263,14 @@ const App = () => {
               leaveTo="w-0"
             ></Transition>
           </div>
-          <div className="h-full pl-4 flex items-center sm:pl-6">
+          <button
+            type="button" 
+            className="h-full pl-4 flex items-center sm:pl-6"
+            onClick={toggleSidebar}
+          >
             <p className="text-18 font-bold sm:text-20">{activeBoard.name}</p>
             <img src={chevronDownImg} className="sm:hidden w-2.5 ml-2" />
-          </div>
+          </button>
         </div>
         <div className="py-4 flex items-center">
           <button 
@@ -218,9 +288,38 @@ const App = () => {
             <img src={verticalEllipsisImg} />
           </button>
         </div>
+        <Transition
+          show={sidebarOpen}
+          className="w-4/5 absolute z-20 left-1/2 -translate-x-1/2 top-full sm:hidden"
+          enter={`transition ${sidebarEnterDurationClass}`}
+          enterFrom="-translate-y-4 opacity-0"
+          enterTo="translate-y-0 opacity-100"
+          leave={`transition ${sidebarLeaveDurationClass}`}
+          leaveFrom="translate-y-0 opacity-100"
+          leaveTo="-translate-y-4 opacity-0"
+        >
+          <div className="relative py-4 mt-4 mx-auto bg-white rounded-lg overflow-x-hidden">
+            <BoardList
+              boards={boards}
+              activeBoardIndex={activeBoardIndex}
+              showBoard={showBoardMobile}
+            />
+          </div>
+        </Transition>
       </div>
-      <div className="grow flex">
-        <div className="h-full relative">
+      <div className="relative grow flex">
+        <Transition
+          show={sidebarOpen}
+          className="sm:hidden absolute z-10 inset-0 bg-black opacity-50"
+          enter={`transition-opacity ${sidebarEnterDurationClass}`}
+          enterFrom="opacity-0"
+          enterTo="opacity-50"
+          leave={`transition-opacity ${sidebarLeaveDurationClass}`}
+          leaveFrom="opacity-50"
+          leaveTo="opacity-0"
+          onClick={toggleSidebar}
+        ></Transition>
+        <div className="hidden h-full relative sm:block">
           <Transition
             appear={true}
             show={sidebarOpen}
@@ -242,53 +341,11 @@ const App = () => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div>
-              <p className="px-6 text-12 font-bold text-gray-300 tracking-title uppercase">All Boards ({boards.length})</p>
-              <div className="mt-5">
-                {boards.map((board, index) => {
-                  const isActive = index === activeBoardIndex
-                  
-                  return (
-                    <button 
-                      type="button" 
-                      className="w-full relative px-6 py-4 group"
-                      onClick={() => showBoard(index)}
-                    >
-                      <div className="pr-5 absolute z-10 top-0 left-0 w-full h-full -translate-x-full group-hover:translate-x-0 transition-transform duration-300 opacity-10">
-                        <div className="w-full h-full bg-purple rounded-r-full"></div>
-                      </div>
-                      <Transition
-                        show={isActive}
-                        className="pr-5 absolute z-20 top-0 left-0 w-full h-full"
-                        enter="transition-transform duration-300"
-                        enterFrom="-translate-x-full"
-                        enterTo="translate-x-0"
-                        leave="transition-transform duration-300"
-                        leaveFrom="translate-x-0"
-                        leaveTo="-translate-x-full"
-                      >
-                        <div className="w-full h-full bg-purple rounded-r-full"></div>
-                      </Transition>
-                      <div className="relative z-30 flex items-center">
-                        <BoardIcon className={classnames("transition-colors duration-300", {
-                          "fill-white": isActive,
-                          "fill-gray-300 group-hover:fill-purple": !isActive,
-                        })} />
-                        <p className={classnames("ml-3 text-16 font-bold transition-colors duration-300", {
-                          "text-white": isActive,
-                          "text-gray-300 group-hover:text-purple": !isActive,
-                        })}>{board.name}</p>
-                      </div>
-                    </button>
-                  )
-                })}
-              </div>
-              <button type="button" className="w-full px-6 py-4 flex items-center">
-                <BoardIcon className="fill-purple" />
-                <PlusIcon className="ml-3 w-2.5 fill-purple" />
-                <span className="ml-1 text-16 font-bold text-purple">Create New Board</span>
-              </button>
-            </div>
+            <BoardList
+              boards={boards}
+              activeBoardIndex={activeBoardIndex}
+              showBoard={showBoard}
+            />
             <button 
               type="button" 
               onClick={toggleSidebar}
@@ -326,19 +383,22 @@ const App = () => {
             </div>
           ) : (
             <div className="h-full flex overflow-x-auto">
-              {activeBoard.columns.map(column => (
-                <div className="w-4/5 px-3 pt-6 shrink-0">
+              {activeBoard.columns.map((column, index) => (
+                <div className="w-4/5 px-3 pt-6 shrink-0" key={index}>
                   <div className="flex items-center">
                     <div className="w-4 h-4 bg-purple rounded-full"></div>
                     <p className="ml-3 text-12 font-bold text-gray-300 tracking-title uppercase">{column.name} ({column.tasks.length})</p>
                   </div>
                   <div className="mt-6 space-y-5">
-                    {column.tasks.map(task => {
+                    {column.tasks.map((task, index) => {
                       const completedSubtaskCount = task.subtasks.filter(subtask => subtask.complete).length
                       const subtaskCount = task.subtasks.length
                       
                       return (
-                        <div className="px-4 py-6 bg-white rounded-lg shadow-[0_4px_6px_0px_rgba(54,78,126,0.10)]">
+                        <div 
+                          className="px-4 py-6 bg-white rounded-lg shadow-[0_4px_6px_0px_rgba(54,78,126,0.10)]"
+                          key={index}
+                        >
                           <p className="text-16 font-bold">{task.name}</p>
                           <p className="mt-2 text-12 font-bold text-gray-300">{completedSubtaskCount} of {subtaskCount} subtasks</p>
                         </div>
