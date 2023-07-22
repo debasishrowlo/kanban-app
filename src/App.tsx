@@ -205,7 +205,7 @@ const App = () => {
         <div className="py-4 flex items-center">
           <button 
             type="button" 
-            className={classnames("px-4 py-2 flex items-center bg-purple rounded-full shadow-md sm:px-6 sm:py-4", {
+            className={classnames("px-4 py-2 flex items-center bg-purple hover:bg-light-purple font-bold rounded-full shadow-md transition-colors sm:px-6 sm:py-4", {
               "opacity-25": !addTaskButtonEnabled,
             })}
             disabled={!addTaskButtonEnabled}
@@ -232,7 +232,7 @@ const App = () => {
           ></Transition>
           <Transition
             appear={true}
-            className="w-sidebar h-full -mt-px pt-8 pb-12 absolute z-20 top-0 left-0 flex flex-col justify-between border-r border-gray-200 bg-white"
+            className="w-sidebar h-full -mt-px py-8 absolute z-20 top-0 left-0 flex flex-col justify-between border-r border-gray-200 bg-white"
             show={sidebarOpen}
             enter={`transition-transform ${sidebarEnterDurationClass}`}
             enterFrom="-translate-x-full"
@@ -250,22 +250,32 @@ const App = () => {
                   return (
                     <button 
                       type="button" 
-                      className="w-full relative px-6 py-4"
+                      className="w-full relative px-6 py-4 group"
                       onClick={() => showBoard(index)}
                     >
-                      {isActive && (
-                        <div className="pr-5 absolute top-0 left-0 w-full h-full">
-                          <div className="w-full h-full bg-purple rounded-r-full"></div>
-                        </div>
-                      )}
-                      <div className="relative z-10 flex items-center">
-                        <BoardIcon className={classnames({
+                      <div className="pr-5 absolute z-10 top-0 left-0 w-full h-full -translate-x-full group-hover:translate-x-0 transition-transform duration-300 opacity-10">
+                        <div className="w-full h-full bg-purple rounded-r-full"></div>
+                      </div>
+                      <Transition
+                        show={isActive}
+                        className="pr-5 absolute z-20 top-0 left-0 w-full h-full"
+                        enter="transition-transform duration-300"
+                        enterFrom="-translate-x-full"
+                        enterTo="translate-x-0"
+                        leave="transition-transform duration-300"
+                        leaveFrom="translate-x-0"
+                        leaveTo="-translate-x-full"
+                      >
+                        <div className="w-full h-full bg-purple rounded-r-full"></div>
+                      </Transition>
+                      <div className="relative z-30 flex items-center">
+                        <BoardIcon className={classnames("transition-colors duration-300", {
                           "fill-white": isActive,
-                          "fill-gray-300": !isActive,
+                          "fill-gray-300 group-hover:fill-purple": !isActive,
                         })} />
-                        <p className={classnames("ml-3 text-16 font-bold", {
+                        <p className={classnames("ml-3 text-16 font-bold transition-colors duration-300", {
                           "text-white": isActive,
-                          "text-gray-300": !isActive,
+                          "text-gray-300 group-hover:text-purple": !isActive,
                         })}>{board.name}</p>
                       </div>
                     </button>
@@ -281,8 +291,11 @@ const App = () => {
             <button 
               type="button" 
               onClick={toggleSidebar}
-              className="px-6 flex items-center text-left"
+              className="relative px-6 py-4 flex items-center text-left group"
             >
+              <div className="pr-5 absolute z-10 top-0 left-0 w-full h-full -translate-x-full group-hover:translate-x-0 transition-transform duration-300 opacity-10">
+                <div className="w-full h-full bg-purple rounded-r-full"></div>
+              </div>
               <img src={slashedEyeImg} />
               <p className="ml-3 text-16 font-bold text-gray-300">Hide Sidebar</p>
             </button>
@@ -302,7 +315,7 @@ const App = () => {
                 <p className="px-8 text-center text-18 font-bold text-gray-300">
                   This board is empty. Create a new column to get started.
                 </p>
-                <button type="button" className="px-5 py-3.5 mt-6 mx-auto block bg-purple text-14 font-bold text-white rounded-full">
+                <button type="button" className="px-5 py-3.5 mt-6 mx-auto block bg-purple hover:bg-light-purple text-14 font-bold text-white rounded-full transition-colors sm:text-16">
                   <div className="flex items-center">
                     <PlusIcon className="w-2.5 fill-white" />
                     <span className="ml-2">Add New Column</span>
