@@ -1,5 +1,5 @@
-import { Transition } from "@headlessui/react"
 import { useState } from "react"
+import { Dialog, Transition } from "@headlessui/react"
 
 import Header from "./Header"
 import Sidebar from "./Sidebar"
@@ -32,37 +32,14 @@ export type Board = {
 export const sidebarEnterDurationClass = "duration-[400ms]"
 export const sidebarLeaveDurationClass = "duration-300"
 
-const SidebarOverlay = ({
-  sidebarOpen,
-  toggleSidebar,
-} : { 
-  sidebarOpen: boolean
-  toggleSidebar: Function,
-}) => {
-  return (
-    <Transition
-      show={sidebarOpen}
-      className="md:hidden absolute z-10 inset-0 bg-black opacity-50"
-      enter={`transition-opacity ${sidebarEnterDurationClass}`}
-      enterFrom="opacity-0"
-      enterTo="opacity-50"
-      leave={`transition-opacity ${sidebarLeaveDurationClass}`}
-      leaveFrom="opacity-50"
-      leaveTo="opacity-0"
-      onClick={() => toggleSidebar()}
-    ></Transition>
-  )
-}
-
 const App = () => {
   const boards:Board[] = [
     {
       name: "Platform Launch",
-      // columns: [],
       columns: [
         {
           name: "Todo",
-          color: "#635FC7",
+          color: "#49C4E5",
           tasks: [
             {
               name: "Research pricing points of various competitors and trial different business models",
@@ -116,7 +93,7 @@ const App = () => {
         },
         {
           name: "Doing",
-          color: "#635FC7",
+          color: "#8471F2",
           tasks: [
             {
               name: "Research pricing points of various competitors and trial different business models",
@@ -155,7 +132,7 @@ const App = () => {
         },
         {
           name: "Done",
-          color: "#635FC7",
+          color: "#67E2AE",
           tasks: [
             {
               name: "Research pricing points of various competitors and trial different business models",
@@ -204,17 +181,17 @@ const App = () => {
     },
   ]
   const [activeBoardIndex, setActiveBoardIndex] = useState(0)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const activeBoard = boards[activeBoardIndex]
   const boardEmpty = activeBoard.columns.length === 0
   const addTaskButtonEnabled = !boardEmpty
 
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const selectBoard = (index:number) => setActiveBoardIndex(index)
-  const selectBoardMobile = (index:number) => {
-    setActiveBoardIndex(index)
+
+  const headerSelectBoard = (index:number) => {
+    selectBoard(index)
     toggleSidebar()
   }
   
@@ -227,13 +204,9 @@ const App = () => {
           activeBoardIndex={activeBoardIndex}
           boards={boards}
           toggleSidebar={toggleSidebar}
-          selectBoard={selectBoardMobile}
+          selectBoard={headerSelectBoard}
         />
         <div className="relative grow flex">
-          <SidebarOverlay
-            sidebarOpen={sidebarOpen}
-            toggleSidebar={toggleSidebar}
-          />
           <Sidebar
             sidebarOpen={sidebarOpen}
             activeBoardIndex={activeBoardIndex}

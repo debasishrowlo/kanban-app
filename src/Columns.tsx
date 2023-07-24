@@ -14,7 +14,10 @@ const Columns = ({
           key={index}
         >
           <div className="flex items-center">
-            <div className="w-4 h-4 bg-purple rounded-full"></div>
+            <div 
+              className="w-4 h-4 rounded-full"
+              style={{ backgroundColor: column.color }}
+            />
             <p className="ml-3 text-12 font-bold text-gray-300 tracking-title uppercase">{column.name} ({column.tasks.length})</p>
           </div>
           <div className="mt-6 space-y-5">

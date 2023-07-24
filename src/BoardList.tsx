@@ -6,6 +6,14 @@ import { Board } from "./App"
 import BoardIcon from "./assets/icons/Board"
 import PlusIcon from "./assets/icons/Plus"
 
+export const MenuItemBackground = () => {
+  return (
+    <div className="pr-5 absolute z-10 top-0 left-0 w-full h-full -translate-x-full group-hover:translate-x-0 transition-transform duration-300 opacity-10">
+      <div className="w-full h-full bg-purple rounded-r-full"/>
+    </div>
+  )
+}
+
 export const BoardList = ({
   boards,
   activeBoardIndex,
@@ -29,9 +37,7 @@ export const BoardList = ({
               onClick={() => selectBoard(index)}
               key={index}
             >
-              <div className="pr-5 absolute z-10 top-0 left-0 w-full h-full -translate-x-full group-hover:translate-x-0 transition-transform duration-300 opacity-10">
-                <div className="w-full h-full bg-purple rounded-r-full"></div>
-              </div>
+              <MenuItemBackground />
               <Transition
                 show={isActive}
                 className="pr-5 absolute z-20 top-0 left-0 w-full h-full"
@@ -42,7 +48,7 @@ export const BoardList = ({
                 leaveFrom="translate-x-0"
                 leaveTo="-translate-x-full"
               >
-                <div className="w-full h-full bg-purple rounded-r-full"></div>
+                <div className="w-full h-full bg-purple rounded-r-full" />
               </Transition>
               <div className="relative z-30 flex items-center">
                 <BoardIcon className={classnames("transition-colors duration-300", {
@@ -58,7 +64,8 @@ export const BoardList = ({
           )
         })}
       </div>
-      <button type="button" className="w-full px-6 py-4 flex items-center">
+      <button type="button" className="relative w-full px-6 py-4 flex items-center group">
+        <MenuItemBackground />
         <BoardIcon className="fill-purple" />
         <PlusIcon className="ml-3 w-2.5 fill-purple" />
         <span className="ml-1 text-16 font-bold text-purple">Create New Board</span>

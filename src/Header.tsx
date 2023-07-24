@@ -50,7 +50,7 @@ const Header = ({
             leave={`transition-all ${sidebarLeaveDurationClass}`}
             leaveFrom="w-sidebar"
             leaveTo="w-0"
-          ></Transition>
+          />
         </div>
         <button
           type="button" 
