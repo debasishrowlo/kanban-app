@@ -9,19 +9,18 @@ import PlusIcon from "./assets/icons/Plus"
 import crossImg from "@/src/assets/images/icon-cross.svg"
 
 const Column = ({ 
-    column,
-    columnHasError,
-    setName,
-    setColor,
-    deleteColumn,
-  } : {
-    column: { name: string, color: string },
-    columnHasError: Function,
-    setName: Function,
-    setColor: Function,
-    deleteColumn: Function,
-  },
-) => {
+  column,
+  columnHasError,
+  setName,
+  setColor,
+  deleteColumn,
+} : {
+  column: { name: string, color: string },
+  columnHasError: Function,
+  setName: Function,
+  setColor: Function,
+  deleteColumn: Function,
+}) => {
   const hasError = columnHasError()
   const colors = [
     "#baf3db", "#f8e6a0", "#ffe2bd", "#ffd2cc", "#dfd8fd",
@@ -42,20 +41,30 @@ const Column = ({
           <Listbox value={column.color} onChange={(color:string) => setColor(color)}>
             <Listbox.Button type="button" className="h-full px-4 py-3 outline-none">
               <div
-                className="w-4 h-4 rounded-full"
+                className="w-4 h-4 rounded-full transition-colors duration-300"
                 style={{ backgroundColor: column.color }}
               />
             </Listbox.Button>
-            <Listbox.Options className="ml-2 w-60 absolute z-10 top-1/2 left-full -translate-y-1/2 flex flex-wrap border border-gray-200 bg-white shadow-lg rounded-md overflow-hidden">
-              {colors.map((color, index) => (
-                <Listbox.Option key={index} value={color} className="w-1/5 py-3 flex items-center justify-center hover:bg-gray-200 rounded cursor-pointer">
-                  <div
-                    className="w-4 h-4 rounded-full"
-                    style={{ backgroundColor: color }}
-                  />
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
+            <Transition
+              as={Fragment}
+              enter="transition duration-300"
+              enterFrom="translate-x-4 opacity-0"
+              enterTo="translate-x-0 opacity-100"
+              leave="transition duration-200"
+              leaveFrom="translate-x-0 opacity-100"
+              leaveTo="translate-x-4 opacity-0"
+            >
+              <Listbox.Options className="ml-2 w-60 absolute z-20 top-1/2 left-full -translate-y-1/2 flex flex-wrap border border-gray-200 bg-white shadow-lg rounded-md overflow-hidden">
+                {colors.map((color, index) => (
+                  <Listbox.Option key={index} value={color} className="w-1/5 py-3 flex items-center justify-center hover:bg-gray-200 transition duration-200 rounded cursor-pointer">
+                    <div
+                      className="w-4 h-4 rounded-full"
+                      style={{ backgroundColor: color }}
+                    />
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </Transition>
           </Listbox>
         </div>
         <input
