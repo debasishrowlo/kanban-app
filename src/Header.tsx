@@ -22,6 +22,7 @@ const Header = ({
   boards,
   toggleSidebar,
   selectBoard,
+  showCreateBoardForm,
 } : {
   addTaskButtonEnabled: boolean,
   sidebarOpen: boolean,
@@ -29,6 +30,7 @@ const Header = ({
   boards: Board[],
   toggleSidebar: Function,
   selectBoard: Function,
+  showCreateBoardForm: Function,
 }) => {
   const activeBoard = boards[activeBoardIndex]
 
@@ -97,6 +99,7 @@ const Header = ({
             boards={boards}
             activeBoardIndex={activeBoardIndex}
             selectBoard={selectBoard}
+            showCreateBoardForm={showCreateBoardForm}
           />
         </div>
       </Transition>

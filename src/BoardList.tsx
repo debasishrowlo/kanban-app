@@ -18,10 +18,12 @@ export const BoardList = ({
   boards,
   activeBoardIndex,
   selectBoard,
+  showCreateBoardForm,
 } : {
   boards: Board[],
   activeBoardIndex: number,
   selectBoard: Function,
+  showCreateBoardForm: Function,
 }) => {
   return (
     <div>
@@ -64,7 +66,11 @@ export const BoardList = ({
           )
         })}
       </div>
-      <button type="button" className="relative w-full px-6 py-4 flex items-center group">
+      <button 
+        type="button" 
+        className="relative w-full px-6 py-4 flex items-center group"
+        onClick={() => showCreateBoardForm()}
+      >
         <MenuItemBackground />
         <BoardIcon className="fill-purple" />
         <PlusIcon className="ml-3 w-2.5 fill-purple" />

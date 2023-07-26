@@ -21,7 +21,7 @@ const SidebarOverlay = ({
   return (
     <Transition
       show={sidebarOpen}
-      className="overlay absolute md:hidden"
+      className="overlay absolute z-10 md:hidden"
       enter={`transition-opacity ${sidebarEnterDurationClass}`}
       enterFrom="opacity-0"
       enterTo="opacity-50"
@@ -39,12 +39,14 @@ const Sidebar = ({
   boards,
   selectBoard,
   toggleSidebar,
+  showCreateBoardForm,
 } : {
   sidebarOpen: boolean,
   activeBoardIndex: number,
   boards: Board[],
   selectBoard: Function,
   toggleSidebar: Function,
+  showCreateBoardForm: Function,
 }) => {
   return (
     <>
@@ -78,6 +80,7 @@ const Sidebar = ({
             boards={boards}
             activeBoardIndex={activeBoardIndex}
             selectBoard={selectBoard}
+            showCreateBoardForm={showCreateBoardForm}
           />
           <button 
             type="button" 
