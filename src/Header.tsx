@@ -1,5 +1,6 @@
+import { Fragment } from "react"
 import classnames from "classnames"
-import { Transition } from "@headlessui/react"
+import { Listbox, Transition } from "@headlessui/react"
 
 import {
   Board,
@@ -80,9 +81,31 @@ const Header = ({
           <PlusIcon className="w-3 fill-white" />
           <span className="hidden ml-2 text-white md:block">Add New Task</span>
         </button>
-        <button type="button" className="h-full px-4 md:px-6">
-          <img src={verticalEllipsisImg} />
-        </button>
+        <div className="relative flex items-center">
+          <Listbox value={null} onChange={() => {}}>
+            <Listbox.Button type="button" className="h-full px-4 md:px-6 md:py-4">
+              <img src={verticalEllipsisImg} />
+            </Listbox.Button>
+            <Transition
+              as={Fragment}
+              enter="transition duration-300"
+              enterFrom="-translate-y-2 opacity-0"
+              enterTo="translate-x-0 opacity-100"
+              leave="transition duration-200"
+              leaveFrom="translate-x-0 opacity-100"
+              leaveTo="-translate-y-2 opacity-0"
+            >
+              <Listbox.Options className="w-48 mt-5 mr-4 absolute z-10 top-full right-0 bg-white overflow-hidden shadow-lg rounded-lg md:mr-6">
+                <Listbox.Option className="px-4 py-4 hover:bg-gray-200 text-14 font-medium text-gray-300 whitespace-nowrap cursor-pointer transition-colors duration-300" value={null}>
+                  Edit Board
+                </Listbox.Option>
+                <Listbox.Option className="px-4 py-4 hover:bg-light-red/20 text-14 font-medium text-red whitespace-nowrap cursor-pointer transition-colors duration-300" value={null}>
+                  Delete Board
+                </Listbox.Option>
+              </Listbox.Options>
+            </Transition>
+          </Listbox>
+        </div>
       </div>
       <Transition
         show={sidebarOpen}
