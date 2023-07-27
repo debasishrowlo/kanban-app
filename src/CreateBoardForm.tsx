@@ -5,8 +5,7 @@ import * as validate from "yup"
 import classnames from "classnames"
 
 import PlusIcon from "./assets/icons/Plus"
-
-import crossImg from "@/src/assets/images/icon-cross.svg"
+import CrossIcon from "./assets/icons/Cross"
 
 const Column = ({ 
   column,
@@ -33,7 +32,7 @@ const Column = ({
 
   return (
     <div className="mt-2 flex items-center">
-      <div className={classnames("w-full flex items-center border rounded", {
+      <div className={classnames("w-full relative flex items-center border rounded", {
         "border-gray-300": !hasError,
         "border-red": hasError,
       })}>
@@ -74,13 +73,19 @@ const Column = ({
           onChange={(e) => setName(e.target.value)}
           autoFocus
         />
+        {hasError && (
+          <p className="mr-4 absolute top-1/2 right-0 -translate-y-1/2 text-14 font-medium text-red">Can't be empty</p>
+        )}
       </div>
       <button 
         type="button" 
         className="-mr-4 px-4 py-3"
         onClick={() => deleteColumn()}
       >
-        <img src={crossImg} />
+        <CrossIcon className={classnames({
+          "fill-gray-300": !hasError,
+          "fill-red": hasError,
+        })} />
       </button>
     </div>
   )
@@ -184,17 +189,22 @@ const CreateBoardForm = ({
                   <p className="text-18 font-bold">Add new board</p>
                   <div className="mt-6">
                     <p className="text-12 font-bold text-gray-300">Board Name</p>
-                    <input 
-                      type="text" 
-                      className={classnames("w-full mt-2 px-4 py-2.5 border text-14 font-medium rounded placeholder:text-gray-300 outline-none", {
-                        "border-gray-300": !nameHasError,
-                        "border-red": nameHasError,
-                      })}
-                      placeholder="e.g. Web Design"
-                      value={form.values.name}
-                      onChange={(e) => setBoardName(e.target.value)}
-                      autoFocus
-                    />
+                    <div className="mt-2 relative">
+                      <input 
+                        type="text" 
+                        className={classnames("w-full px-4 py-2.5 border text-14 font-medium rounded placeholder:text-gray-300 outline-none", {
+                          "border-gray-300": !nameHasError,
+                          "border-red": nameHasError,
+                        })}
+                        placeholder="e.g. Web Design"
+                        value={form.values.name}
+                        onChange={(e) => setBoardName(e.target.value)}
+                        autoFocus
+                      />
+                      {nameHasError && (
+                        <p className="mr-4 absolute top-1/2 right-0 -translate-y-1/2 text-14 font-medium text-red">Can't be empty</p>
+                      )}
+                    </div>
                   </div>
                   <div className="mt-6">
                     <p className="text-12 font-bold text-gray-300">Board Columns</p>
