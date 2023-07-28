@@ -1,10 +1,12 @@
 import { Fragment, useEffect } from "react"
-import { Dialog, Listbox, Transition } from "@headlessui/react"
+import { Listbox, Transition } from "@headlessui/react"
 import { useFormik, FormikTouched } from "formik"
 import * as validate from "yup"
 import classnames from "classnames"
 
-import { Board, Column, Task } from "./App"
+import Dialog from "./Dialog"
+
+import { Board, Column } from "./App"
 
 import PlusIcon from "@/src/assets/icons/Plus"
 import CrossIcon from "./assets/icons/Cross"
@@ -187,102 +189,77 @@ const BoardForm = ({
   }
 
   return (
-    <Transition show={visible}>
-      <Dialog onClose={() => close()}>
-        <Transition.Child
-          className="overlay"
-          enter="transition-opacity duration-500"
-          enterFrom="opacity-0"
-          enterTo="opacity-50"
-          leave="transition-opacity duration-300"
-          leaveFrom="opacity-50"
-          leaveTo="opacity-0"
-        />
-        <div className="mx-auto px-4 w-full fixed z-50 inset-0 flex items-center justify-center md:px-0">
-          <Transition.Child
-            as={Fragment}
-            enter="transition duration-500"
-            enterFrom="translate-y-5 opacity-0"
-            enterTo="translate-y-0 opacity-100"
-            leave="transition duration-300"
-            leaveFrom="translate-y-0 opacity-100"
-            leaveTo="translate-y-5 opacity-0"
-          >
-            <Dialog.Panel as={Fragment}>
-              <form onSubmit={form.handleSubmit} className="w-full p-6 max-w-dialog bg-white rounded-md sm:p-8">
-                <p className="text-18 font-bold">{title}</p>
-                <div className="mt-6">
-                  <p className="text-12 font-bold text-gray-300">Board Name</p>
-                  <div className="mt-2 relative">
-                    <input 
-                      type="text" 
-                      className={classnames("w-full px-4 py-2.5 border text-14 font-medium rounded placeholder:text-gray-300 outline-none", {
-                        "border-gray-300": !nameHasError,
-                        "border-red": nameHasError,
-                      })}
-                      placeholder="e.g. Web Design"
-                      value={form.values.name}
-                      onChange={(e) => setBoardName(e.target.value)}
-                      autoFocus
-                    />
-                    {nameHasError && (
-                      <p className="mr-4 absolute top-1/2 right-0 -translate-y-1/2 text-14 font-medium text-red">Can't be empty</p>
-                    )}
-                  </div>
-                </div>
-                <div className="mt-6">
-                  <p className="text-12 font-bold text-gray-300">Board Columns</p>
-                  {form.values.columns.map((column, index) => {
-                    const setColumnName = (name:string) => {
-                      const columns = form.values.columns
-
-                      form.setFieldValue("columns", [
-                        ...columns.slice(0, index),
-                        { ...columns[index], name },
-                        ...columns.slice(index + 1),
-                      ])
-                    }
-
-                    const setColumnColor = (color:string) => {
-                      const columns = form.values.columns
-
-                      form.setFieldValue("columns", [
-                        ...columns.slice(0, index),
-                        { ...columns[index], color },
-                        ...columns.slice(index + 1),
-                      ])
-                    }
-
-                    return (
-                      <Column 
-                        key={index}
-                        column={column}
-                        setName={setColumnName}
-                        setColor={setColumnColor}
-                        deleteColumn={() => deleteColumn(index)}
-                        hasError={columnHasError(index)}
-                      />
-                    )
-                  })}
-                </div>
-                <button 
-                  type="button" 
-                  className="relative mt-3 w-full py-2.5 flex justify-center items-center outline-none"
-                  onClick={() => addColumn()}
-                >
-                  <div className="absolute w-full h-full bg-purple rounded-full opacity-10" />
-                  <PlusIcon className="ml-3 w-2 fill-purple" />
-                  <p className="ml-1 text-14 font-bold text-purple">Add New Column</p>
-                </button>
-                <button type="submit" className="relative mt-6 w-full py-2.5 flex justify-center items-center bg-purple text-14 font-bold text-white rounded-full">
-                  {submitButtonText}
-                </button>
-              </form>
-            </Dialog.Panel>
-          </Transition.Child>
+    <Dialog visible={visible} close={close}>
+      <form onSubmit={form.handleSubmit} className="w-full p-6 max-w-dialog bg-white rounded-md sm:p-8">
+        <p className="text-18 font-bold">{title}</p>
+        <div className="mt-6">
+          <p className="text-12 font-bold text-gray-300">Board Name</p>
+          <div className="mt-2 relative">
+            <input 
+              type="text" 
+              className={classnames("w-full px-4 py-2.5 border text-14 font-medium rounded placeholder:text-gray-300 outline-none", {
+                "border-gray-300": !nameHasError,
+                "border-red": nameHasError,
+              })}
+              placeholder="e.g. Web Design"
+              value={form.values.name}
+              onChange={(e) => setBoardName(e.target.value)}
+              autoFocus
+            />
+            {nameHasError && (
+              <p className="mr-4 absolute top-1/2 right-0 -translate-y-1/2 text-14 font-medium text-red">Can't be empty</p>
+            )}
+          </div>
         </div>
-      </Dialog>
-    </Transition>
+        <div className="mt-6">
+          <p className="text-12 font-bold text-gray-300">Board Columns</p>
+          {form.values.columns.map((column, index) => {
+            const setColumnName = (name:string) => {
+              const columns = form.values.columns
+
+              form.setFieldValue("columns", [
+                ...columns.slice(0, index),
+                { ...columns[index], name },
+                ...columns.slice(index + 1),
+              ])
+            }
+
+            const setColumnColor = (color:string) => {
+              const columns = form.values.columns
+
+              form.setFieldValue("columns", [
+                ...columns.slice(0, index),
+                { ...columns[index], color },
+                ...columns.slice(index + 1),
+              ])
+            }
+
+            return (
+              <Column 
+                key={index}
+                column={column}
+                setName={setColumnName}
+                setColor={setColumnColor}
+                deleteColumn={() => deleteColumn(index)}
+                hasError={columnHasError(index)}
+              />
+            )
+          })}
+        </div>
+        <button 
+          type="button" 
+          className="relative mt-3 w-full py-2.5 flex justify-center items-center outline-none"
+          onClick={() => addColumn()}
+        >
+          <div className="absolute w-full h-full bg-purple rounded-full opacity-10" />
+          <PlusIcon className="ml-3 w-2 fill-purple" />
+          <p className="ml-1 text-14 font-bold text-purple">Add New Column</p>
+        </button>
+        <button type="submit" className="relative mt-6 w-full py-2.5 flex justify-center items-center bg-purple text-14 font-bold text-white rounded-full">
+          {submitButtonText}
+        </button>
+      </form>
+    </Dialog>
   )
 }
 
