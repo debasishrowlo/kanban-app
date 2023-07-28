@@ -189,8 +189,8 @@ const BoardForm = ({
   }
 
   return (
-    <Dialog visible={visible} close={close}>
-      <form onSubmit={form.handleSubmit} className="w-full p-6 max-w-dialog bg-white rounded-md sm:p-8">
+    <Dialog visible={visible} close={close} className="p-6 md:p-8">
+      <form onSubmit={form.handleSubmit}>
         <p className="text-18 font-bold">{title}</p>
         <div className="mt-6">
           <p className="text-12 font-bold text-gray-300">Board Name</p>
@@ -248,10 +248,10 @@ const BoardForm = ({
         </div>
         <button 
           type="button" 
-          className="relative mt-3 w-full py-2.5 flex justify-center items-center outline-none"
+          className="relative mt-3 w-full py-2.5 flex justify-center items-center outline-none bg-purple/10 rounded-full"
           onClick={() => addColumn()}
         >
-          <div className="absolute w-full h-full bg-purple rounded-full opacity-10" />
+          {/* <div className="absolute w-full h-full bg-purple rounded-full opacity-10" /> */}
           <PlusIcon className="ml-3 w-2 fill-purple" />
           <p className="ml-1 text-14 font-bold text-purple">Add New Column</p>
         </button>

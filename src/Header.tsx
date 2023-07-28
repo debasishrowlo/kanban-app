@@ -25,6 +25,7 @@ const Header = ({
   selectBoard,
   showCreateBoardForm,
   editBoard,
+  showDeleteBoardConfirmation,
 } : {
   addTaskButtonEnabled: boolean,
   sidebarOpen: boolean,
@@ -34,6 +35,7 @@ const Header = ({
   selectBoard: Function,
   showCreateBoardForm: Function,
   editBoard: Function,
+  showDeleteBoardConfirmation: Function,
 }) => {
   const activeBoard = boards[activeBoardIndex]
 
@@ -104,7 +106,11 @@ const Header = ({
                 >
                   Edit Board
                 </Listbox.Option>
-                <Listbox.Option className="px-4 py-4 hover:bg-light-red/20 text-14 font-medium text-red whitespace-nowrap cursor-pointer transition-colors duration-300" value={null}>
+                <Listbox.Option 
+                  className="px-4 py-4 hover:bg-light-red/20 text-14 font-medium text-red whitespace-nowrap cursor-pointer transition-colors duration-300" 
+                  value={null}
+                  onClick={() => showDeleteBoardConfirmation()}
+                >
                   Delete Board
                 </Listbox.Option>
               </Listbox.Options>

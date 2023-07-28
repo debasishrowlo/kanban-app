@@ -2,10 +2,12 @@ import { Fragment, ReactNode } from "react"
 import { Dialog as LibDialog, Transition } from "@headlessui/react"
 
 const Dialog = ({
+  className = "",
   visible,
   children,
   close,
 } : { 
+  className?: string,
   visible: boolean,
   children: ReactNode,
   close: Function,
@@ -33,7 +35,9 @@ const Dialog = ({
             leaveTo="translate-y-5 opacity-0"
           >
             <LibDialog.Panel as={Fragment}>
-              {children}
+              <div className={`w-full max-w-dialog bg-white rounded-md ${className}`}>
+                {children}
+              </div>
             </LibDialog.Panel>
           </Transition.Child>
         </div>
