@@ -146,6 +146,14 @@ const BoardForm = ({
       ...form.values.columns.slice(0, index),
       ...form.values.columns.slice(index + 1),
     ]);
+    const columns = form.touched.columns as FormikTouched<any>[]
+    form.setTouched({
+      ...form.touched,
+      columns: [
+        ...columns.slice(0, index),
+        ...columns.slice(index + 1),
+      ]
+    });
   }
 
   const nameHasError = form.touched?.name && form.errors?.name
