@@ -24,6 +24,7 @@ const Header = ({
   toggleSidebar,
   selectBoard,
   showCreateBoardForm,
+  editBoard,
 } : {
   addTaskButtonEnabled: boolean,
   sidebarOpen: boolean,
@@ -32,6 +33,7 @@ const Header = ({
   toggleSidebar: Function,
   selectBoard: Function,
   showCreateBoardForm: Function,
+  editBoard: Function,
 }) => {
   const activeBoard = boards[activeBoardIndex]
 
@@ -96,7 +98,10 @@ const Header = ({
               leaveTo="-translate-y-2 opacity-0"
             >
               <Listbox.Options className="w-48 mt-5 mr-4 absolute z-10 top-full right-0 bg-white overflow-hidden shadow-lg rounded-lg md:mr-6">
-                <Listbox.Option className="px-4 py-4 hover:bg-gray-200 text-14 font-medium text-gray-300 whitespace-nowrap cursor-pointer transition-colors duration-300" value={null}>
+                <Listbox.Option 
+                  className="px-4 py-4 hover:bg-gray-200 text-14 font-medium text-gray-300 whitespace-nowrap cursor-pointer transition-colors duration-300" value={null}
+                  onClick={() => editBoard()}
+                >
                   Edit Board
                 </Listbox.Option>
                 <Listbox.Option className="px-4 py-4 hover:bg-light-red/20 text-14 font-medium text-red whitespace-nowrap cursor-pointer transition-colors duration-300" value={null}>

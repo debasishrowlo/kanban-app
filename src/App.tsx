@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar"
 import EmptyBoard from "./EmptyBoard"
 import Columns from "./Columns"
 import CreateBoardForm from "./CreateBoardForm"
+import EditBoardForm from "./EditBoardForm"
 
 const enum taskStatuses {
   todo = "Todo",
@@ -12,21 +13,25 @@ const enum taskStatuses {
   done = "Done",
 }
 
+export type Task = {
+  name: string,
+  description: string,
+  status: taskStatuses,
+  subtasks: Array<{
+    title: string,
+    complete: boolean,
+  }>
+}
+
+export type Column = {
+  name: string,
+  color: string,
+  tasks: Task[],
+}
+
 export type Board = {
   name: string,
-  columns: Array<{
-    name: string,
-    color: string,
-    tasks: Array<{
-      name: string,
-      description: string,
-      status: taskStatuses,
-      subtasks: Array<{
-        title: string,
-        complete: boolean,
-      }>
-    }>,
-  }>,
+  columns: Column[],
 }
 
 export const sidebarEnterDurationClass = "duration-[400ms]"
@@ -190,6 +195,8 @@ const App = () => {
   const activeBoardIndex = boardData.activeBoardIndex
 
   const [createBoardFormVisible, setCreateBoardFormVisible] = useState(false)
+  const [editBoardFormVisible, setEditBoardFormVisible] = useState(false)
+
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const activeBoard = boards[activeBoardIndex]
@@ -211,6 +218,14 @@ const App = () => {
     setCreateBoardFormVisible(false)
   }
 
+  const showEditBoardForm = () => {
+    setEditBoardFormVisible(false)
+  }
+
+  const hideEditBoardForm = () => {
+    setEditBoardFormVisible(false)
+  }
+
   const selectBoard = (index:number) => {
     setBoardData({
       ...boardData,
@@ -230,6 +245,21 @@ const App = () => {
     })
   }
 
+  const updateBoard = (board:Board) => {
+    setBoardData({
+      ...boardData,
+      boards: [ 
+        ...boards.slice(0, boardData.activeBoardIndex), 
+        { ...board },
+        ...boards.slice(boardData.activeBoardIndex + 1), 
+      ],
+    })
+  }
+
+  const editBoard = () => {
+    setEditBoardFormVisible(true)
+  }
+
   return (
     <>
       <div className="h-screen flex flex-col">
@@ -241,6 +271,7 @@ const App = () => {
           toggleSidebar={toggleSidebar}
           selectBoard={headerSelectBoard}
           showCreateBoardForm={showCreateBoardFormMobile}
+          editBoard={() => editBoard()}
         />
         <div className="relative grow flex">
           <Sidebar
@@ -264,6 +295,12 @@ const App = () => {
         visible={createBoardFormVisible}
         close={hideCreateBoardForm}
         createBoard={createBoard}
+      />
+      <EditBoardForm
+        visible={editBoardFormVisible}
+        close={hideEditBoardForm}
+        activeBoard={activeBoard}
+        updateBoard={updateBoard}
       />
     </>
   );

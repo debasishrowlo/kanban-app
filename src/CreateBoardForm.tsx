@@ -14,6 +14,8 @@ const CreateBoardForm = ({
       visible={visible}
       close={close}
       onSubmit={createBoard}
+      title="Add New Board"
+      submitButtonText="Create New Board"
     />
   )
 }

@@ -1,8 +1,10 @@
-import { Fragment } from "react"
+import { Fragment, useEffect } from "react"
 import { Dialog, Listbox, Transition } from "@headlessui/react"
 import { useFormik, FormikTouched } from "formik"
 import * as validate from "yup"
 import classnames from "classnames"
+
+import { Board, Column, Task } from "./App"
 
 import PlusIcon from "@/src/assets/icons/Plus"
 import CrossIcon from "./assets/icons/Cross"
@@ -90,24 +92,25 @@ const Column = ({
   )
 }
 
-type TColumn = {
-  name: "string",
-  color: "string",
-}
-
 const BoardForm = ({
   visible,
+  board,
+  title,
+  submitButtonText,
   close,
   onSubmit,
 } : {
   visible: boolean,
+  board?: Board,
+  title: string,
+  submitButtonText: string,
   close: Function,
   onSubmit: Function,
 }) => {
   const form = useFormik({
     initialValues: {
-      name: '',
-      columns: [],
+      name: board ? board.name : '',
+      columns: board ? [...board.columns] : [],
     },
     validationSchema: validate.object().shape({
       name: validate.string().required(),
@@ -116,19 +119,28 @@ const BoardForm = ({
         color: validate.string().required(),
       })),
     }),
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: (values:Board, { resetForm }) => {
       onSubmit({
         name: values.name,
-        columns: values.columns.map((column:TColumn) => ({
-          name: column.name,
-          color: column.color,
-          tasks: [],
-        })),
+        columns: values.columns.map((column:Column, index:number) => {
+          return {
+            name: column.name,
+            color: column.color,
+            tasks: column.tasks || [],
+          }
+        }),
       })
       resetForm()
       close()
     },
   });
+
+  useEffect(() => {
+    if (board) {
+      form.setFieldValue("name", board.name)
+      form.setFieldValue("columns", board.columns)
+    }
+  }, [board])
 
   const setBoardName = (name:string) => {
     form.setFieldValue("name", name)
@@ -146,7 +158,7 @@ const BoardForm = ({
       ...form.values.columns.slice(0, index),
       ...form.values.columns.slice(index + 1),
     ]);
-    const columns = form.touched.columns as FormikTouched<any>[]
+    const columns = form.touched.columns as FormikTouched<any>[] || []
     form.setTouched({
       ...form.touched,
       columns: [
@@ -198,7 +210,7 @@ const BoardForm = ({
           >
             <Dialog.Panel as={Fragment}>
               <form onSubmit={form.handleSubmit} className="w-full p-6 max-w-dialog bg-white rounded-md sm:p-8">
-                <p className="text-18 font-bold">Add new board</p>
+                <p className="text-18 font-bold">{title}</p>
                 <div className="mt-6">
                   <p className="text-12 font-bold text-gray-300">Board Name</p>
                   <div className="mt-2 relative">
@@ -222,7 +234,7 @@ const BoardForm = ({
                   <p className="text-12 font-bold text-gray-300">Board Columns</p>
                   {form.values.columns.map((column, index) => {
                     const setColumnName = (name:string) => {
-                      const columns:TColumn[] = form.values.columns
+                      const columns = form.values.columns
 
                       form.setFieldValue("columns", [
                         ...columns.slice(0, index),
@@ -232,7 +244,7 @@ const BoardForm = ({
                     }
 
                     const setColumnColor = (color:string) => {
-                      const columns:TColumn[] = form.values.columns
+                      const columns = form.values.columns
 
                       form.setFieldValue("columns", [
                         ...columns.slice(0, index),
@@ -263,7 +275,7 @@ const BoardForm = ({
                   <p className="ml-1 text-14 font-bold text-purple">Add New Column</p>
                 </button>
                 <button type="submit" className="relative mt-6 w-full py-2.5 flex justify-center items-center bg-purple text-14 font-bold text-white rounded-full">
-                  Create New Board
+                  {submitButtonText}
                 </button>
               </form>
             </Dialog.Panel>
